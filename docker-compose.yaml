@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  sources:
+    image: postgres:latest
+    container_name: sources
+    restart: always
+    environment:
+      - POSTGRES_DB=${SRC_POSTGRES_DB_DOCKER}
+      - POSTGRES_USER=${SRC_POSTGRES_USER_DOCKER}
+      - POSTGRES_PASSWORD=${SRC_POSTGRES_PASSWORD_DOCKER}
+    ports:
+      - ${SRC_POSTGRES_PORT_DOCKER}
+    volumes:
+      - ./helper/source_init:/docker-entrypoint-initd.b
+      - source-volume:/var/lib/postgresql
+
+
+volumes:
+  source-volume:
