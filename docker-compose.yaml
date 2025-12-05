@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  sources:
+  jk_sources:
     image: postgres:latest
-    container_name: sources
+    container_name: jk_sources
     restart: always
     environment:
       - POSTGRES_DB=${SRC_POSTGRES_DB_DOCKER}
@@ -15,6 +15,19 @@ services:
       - ./helper/source_init:/docker-entrypoint-initd.b
       - source-volume:/var/lib/postgresql
 
-
+  jk_dwh:
+    image: postgres:latest
+    container_name: jk_dwh
+    restart: always
+    environment:
+      - POSTGRES_DB=${DWH_POSTGRES_DB_DOCKER}
+      - POSTGRES_USER=${DWH_POSTGRES_USER_DOCKER}
+      - POSTGRES_PASSWORD=${DWH_POSTGRES_PASSWORD_DOCKER}
+    ports:
+      - ${DWH_POSTGRES_PORT_DOCKER}
+    volumes:
+      - ./helper/source_init:/docker-entrypoint-initd.b
+      - source-volume:/var/lib/postgresql
 volumes:
-  source-volume:
+  jk_source-volume:
+  jk_dwh-volume:
