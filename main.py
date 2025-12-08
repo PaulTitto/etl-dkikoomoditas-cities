@@ -5,9 +5,9 @@ import pandas as pd
 import requests
 
 CITIES_MAP = {
-    9: "Bekasi",
-    8: "Tangerang",
-    7: "Bogor",
+    # 9: "Bekasi",
+    # 8: "Tangerang",
+    # 7: "Bogor",
     5: "Jakarta Utara",
     3: "Jakarta Selatan",
     4: "Jakarta Timur",
@@ -31,7 +31,7 @@ def fetch_jakarta_commodity_by_cities(city_id: int, year_month: str = "2025-11")
     city_name = CITIES_MAP.get(city_id, f"ID {city_id} (Unknown)")
     print(f"Fetch data from {api}")
     try:
-        response = requests.get(api, headers=HEADERS, verify=False, timeout=5,impersonate="chrome120")
+        response = requests.get(api, headers=HEADERS, verify=False, timeout=5)
         response.raise_for_status()
 
         try:
@@ -57,12 +57,7 @@ def fetch_jakarta_commodity_by_cities(city_id: int, year_month: str = "2025-11")
             ],
             errors='ignore'
         )
-        data.rename(
-            columns={
-                "value": "daily_price",
-                "time": "date",
-            }
-        )
+        data = data.rename(columns={"value": "daily_price", "time": "date"})
         data["city_id"] = city_id
         data["city_name"] = city_name
         return data
@@ -120,22 +115,39 @@ def fetch_all_month_data(year: int, cities: dict) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    target_month = "2025-11"
-    target_year_2024 = 2024
-    target_year_2025 = 2025
-    combined_df_2024 = fetch_all_month_data(target_year_2024, CITIES_MAP)
+    # target_month = "2025-11"
+    # target_year_2025 = 2025
+    target_year_2023 = 2023
+    # combined_df_2024 = fetch_all_month_data(target_year_2024, CITIES_MAP)
     # combined_df_2024.to_csv("cities_2024.csv", index=False)
-    combined_df_2025 = fetch_all_month_data(target_year_2025, CITIES_MAP)
-    dfs_to_concat = []
-    if not combined_df_2024.empty:
-        dfs_to_concat.append(combined_df_2024)
-    if not combined_df_2025.empty:
-        dfs_to_concat.append(combined_df_2025)
+    combined_df_2023 = fetch_all_month_data(target_year_2023, CITIES_MAP)
+    combined_df_2023.to_csv("cities_2023.csv", index=False)
 
-    if dfs_to_concat:
-        combined_df = pd.concat(dfs_to_concat, ignore_index=True)
-        filename = "jakarta_commodity_2024_2025.csv"
-        combined_df.to_csv(filename, index=False)
-        print(f"\nSUCCESS: Saved {len(combined_df)} records to {filename}")
-    else:
-        print("\nFAILED: No data collected.")
+    # month1 = fetch_all_cities_data(CITIES_MAP, "2025-01")
+    # month2 = fetch_all_cities_data(CITIES_MAP, "2025-02")
+    # month3 = fetch_all_cities_data(CITIES_MAP, "2025-03")
+    # month4 = fetch_all_cities_data(CITIES_MAP, "2025-04")
+    # month5 = fetch_all_cities_data(CITIES_MAP, "2025-05")
+    # month6 = fetch_all_cities_data(CITIES_MAP, "2025-06")
+    # month7 = fetch_all_cities_data(CITIES_MAP, "2025-07")
+    # month8 = fetch_all_cities_data(CITIES_MAP, "2025-08")
+    # month9 = fetch_all_cities_data(CITIES_MAP, "2025-09")
+    # month10 = fetch_all_cities_data(CITIES_MAP, "2025-10")
+    # month11 = fetch_all_cities_data(CITIES_MAP, "2025-11")
+    # month12 = fetch_all_cities_data(CITIES_MAP, "2025-12")
+
+    # month1.to_csv("cities_2025-01.csv", index=False)
+
+    # dfs_to_concat = []
+    # if not combined_df_2024.empty:
+    #     dfs_to_concat.append(combined_df_2024)
+    # if not combined_df_2025.empty:
+    #     dfs_to_concat.append(combined_df_2025)
+    #
+    # if dfs_to_concat:
+    #     combined_df = pd.concat(dfs_to_concat, ignore_index=True)
+    #     filename = "jakarta_commodity_2024_2025.csv"
+    #     combined_df.to_csv(filename, index=False)
+    #     print(f"\nSUCCESS: Saved {len(combined_df)} records to {filename}")
+    # else:
+    #     print("\nFAILED: No data collected.")
